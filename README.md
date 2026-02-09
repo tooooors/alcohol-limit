@@ -2,6 +2,8 @@
 
 飲酒量を記録して、設定した制限を超えないようにサポートするWebアプリケーションです。
 
+<img width="268" height="330" alt="スクリーンショット 2026-02-09 212041" src="https://github.com/user-attachments/assets/12a7fa5e-36f7-4279-8f44-3b5de3c34879" />
+
 🚀 **[デモサイトを見る](https://tooooors.github.io/alcohol-limit/)**
 
 ## 機能
