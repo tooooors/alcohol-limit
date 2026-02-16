@@ -17,19 +17,34 @@
     />
 
     <ExplosionEffect :trigger="explosionTrigger" />
+
+    <Toast
+      :show="toastState.show"
+      :message="toastState.message"
+      :type="toastState.type"
+      @close="hideToast"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useDrinkTracker } from './composables/useDrinkTracker';
+import { useToast } from './composables/useToast';
 import LimitInput from './components/LimitInput.vue';
 import DrinkCounter from './components/DrinkCounter.vue';
 import DrinkButton from './components/DrinkButton.vue';
 import WarningDialog from './components/WarningDialog.vue';
 import ExplosionEffect from './components/ExplosionEffect.vue';
+import Toast from './components/Toast.vue';
 
 const { limit, count, isOverLimit, setLimit, drink, reset } = useDrinkTracker();
+const { toastState, showToast, hideToast } = useToast();
+
+// 開発環境でのテスト用（本番では使用しない）
+if (import.meta.env.DEV) {
+  (window as any).showToast = showToast;
+}
 
 const showWarning = ref(false);
 const explosionTrigger = ref(0);
