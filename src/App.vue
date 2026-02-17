@@ -2,7 +2,7 @@
   <div class="container">
     <h1>🍺 飲み過ぎ防止</h1>
 
-    <LimitInput :model-value="limit" @update:model-value="setLimit" />
+    <LimitInput @explosion="handleExplosion" />
 
     <DrinkCounter :count="count" :limit="limit" :is-over-limit="isOverLimit" />
 
@@ -38,7 +38,7 @@ import WarningDialog from './components/WarningDialog.vue';
 import ExplosionEffect from './components/ExplosionEffect.vue';
 import Toast from './components/Toast.vue';
 
-const { limit, count, isOverLimit, setLimit, drink, reset } = useDrinkTracker();
+const { limit, count, isOverLimit, drink, reset } = useDrinkTracker();
 const { toastState, showToast, hideToast } = useToast();
 
 // 開発環境でのテスト用（本番では使用しない）
@@ -65,6 +65,10 @@ function handleConfirm() {
 
 function handleCancel() {
   showWarning.value = false;
+}
+
+function handleExplosion() {
+  explosionTrigger.value++;
 }
 </script>
 
