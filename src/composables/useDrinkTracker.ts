@@ -22,48 +22,49 @@ function saveToStorage(data: StoredData): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+// シングルトンインスタンスを作成
+const today = getTodayString();
+const stored = loadFromStorage();
+
+// 日付が変わっていたらリセット
+const initialData: StoredData =
+  stored && stored.date === today
+    ? stored
+    : { date: today, limit: 3, count: 0 };
+
+const limit = ref(initialData.limit);
+const count = ref(initialData.count);
+
+const isOverLimit = computed(() => count.value >= limit.value);
+
+// 状態変更時に自動保存
+watch(
+  [limit, count],
+  () => {
+    saveToStorage({
+      date: today,
+      limit: limit.value,
+      count: count.value,
+    });
+  },
+  { immediate: true }
+);
+
+function setLimit(n: number) {
+  if (n >= 1) {
+    limit.value = n;
+  }
+}
+
+function drink() {
+  count.value++;
+}
+
+function reset() {
+  count.value = 0;
+}
+
 export function useDrinkTracker() {
-  const today = getTodayString();
-  const stored = loadFromStorage();
-
-  // 日付が変わっていたらリセット
-  const initialData: StoredData =
-    stored && stored.date === today
-      ? stored
-      : { date: today, limit: 3, count: 0 };
-
-  const limit = ref(initialData.limit);
-  const count = ref(initialData.count);
-
-  const isOverLimit = computed(() => count.value >= limit.value);
-
-  // 状態変更時に自動保存
-  watch(
-    [limit, count],
-    () => {
-      saveToStorage({
-        date: today,
-        limit: limit.value,
-        count: count.value,
-      });
-    },
-    { immediate: true }
-  );
-
-  function setLimit(n: number) {
-    if (n >= 1) {
-      limit.value = n;
-    }
-  }
-
-  function drink() {
-    count.value++;
-  }
-
-  function reset() {
-    count.value = 0;
-  }
-
   return {
     limit,
     count,
